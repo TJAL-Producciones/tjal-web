@@ -7,7 +7,8 @@ interface Props {
   title: string;
   description?: string;
   lang?: Lang;
-  canonicalPath?: string; // e.g. '/' or '/privacidad'
+  canonicalPath?: string;  // e.g. '/' or '/privacidad'
+  alternatePath?: string;  // ruta explícita en el otro idioma (incluye base)
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   description = 'Cuoteando — Registrá y seguí tus cuotas. App para Android.',
   lang = 'es',
   canonicalPath = '/',
+  alternatePath,
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -30,10 +32,13 @@ const enPath  = lang === 'en'
 const t = useTranslations(lang);
 
 // Nav links per lang
-const homeUrl    = lang === 'en' ? `${base}/en/`         : `${base}/`;
-const privUrl    = lang === 'en' ? `${base}/en/privacy/` : `${base}/privacidad/`;
-const langToggle = lang === 'en' ? esPath                : enPath;
-const langLabel  = lang === 'en' ? 'ES'                  : 'EN';
+const homeUrl = lang === 'en' ? `${base}/en/`         : `${base}/`;
+const privUrl = lang === 'en' ? `${base}/en/privacy/` : `${base}/privacidad/`;
+const langLabel = lang === 'en' ? 'ES' : 'EN';
+
+// Language toggle: use explicit alternatePath if provided (needed when slug differs per locale)
+// e.g. /privacidad ↔ /en/privacy
+const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
 ---
 
 <!doctype html>
