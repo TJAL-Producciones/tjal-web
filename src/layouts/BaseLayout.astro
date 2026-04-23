@@ -1,0 +1,115 @@
+---
+// src/layouts/BaseLayout.astro
+import '../styles/global.css';
+import { getLangFromUrl, useTranslations, type Lang } from '../i18n/translations';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: Lang;
+  canonicalPath?: string; // e.g. '/' or '/privacidad'
+}
+
+const {
+  title,
+  description = 'Cuoteando — Registrá y seguí tus cuotas. App para Android.',
+  lang = 'es',
+  canonicalPath = '/',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Alternate links for hreflang
+const esPath  = lang === 'en'
+  ? `${base}${canonicalPath.replace(/^\/en/, '')}`
+  : `${base}${canonicalPath}`;
+const enPath  = lang === 'en'
+  ? `${base}${canonicalPath}`
+  : `${base}/en${canonicalPath}`;
+
+const t = useTranslations(lang);
+
+// Nav links per lang
+const homeUrl    = lang === 'en' ? `${base}/en/`         : `${base}/`;
+const privUrl    = lang === 'en' ? `${base}/en/privacy/` : `${base}/privacidad/`;
+const langToggle = lang === 'en' ? esPath                : enPath;
+const langLabel  = lang === 'en' ? 'ES'                  : 'EN';
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} — Cuoteando | TJAL Producciones</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical & hreflang -->
+    <link rel="canonical" href={`https://tjal-producciones.github.io${lang === 'en' ? enPath : esPath}`} />
+    <link rel="alternate" hreflang="es" href={`https://tjal-producciones.github.io${esPath}`} />
+    <link rel="alternate" hreflang="en" href={`https://tjal-producciones.github.io${enPath}`} />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="icon" href={`${base}/favicon.ico`} />
+
+    <!-- Open Graph -->
+    <meta property="og:title"       content={`${title} — Cuoteando`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type"        content="website" />
+    <meta property="og:locale"      content={lang === 'es' ? 'es_AR' : 'en_US'} />
+  </head>
+
+  <body>
+    <!-- ░░ HEADER ░░ -->
+    <header class="site-header" role="banner">
+      <div class="header-inner">
+        <a href={homeUrl} class="brand" aria-label="Cuoteando — Inicio">CUOTEANDO</a>
+
+        <nav class="site-nav" aria-label="Navegación principal">
+          <a href={homeUrl}
+             class={Astro.url.pathname === homeUrl || Astro.url.pathname === homeUrl.slice(0,-1) ? 'active' : ''}>
+            {t('nav.home')}
+          </a>
+          <a href={privUrl}
+             class={Astro.url.pathname.includes('privacidad') || Astro.url.pathname.includes('privacy') ? 'active' : ''}>
+            {t('nav.privacy')}
+          </a>
+          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" id="nav-playstore-link">
+            {t('nav.playstore')}
+          </a>
+
+          <!-- Language Switcher -->
+          <div class="lang-switcher" role="navigation" aria-label="Cambiar idioma / Change language">
+            <a href={langToggle}
+               class={lang !== 'en' && langLabel === 'EN' ? '' : (lang === 'en' && langLabel === 'EN' ? 'current' : '')}
+               aria-label={langLabel === 'EN' ? 'Switch to English' : 'Cambiar a Español'}>
+              {langLabel}
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ░░ MAIN CONTENT ░░ -->
+    <main id="main-content" role="main">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+
+    <!-- ░░ FOOTER ░░ -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-inner">
+        <span>{t('footer.copy') as string}</span>
+        <div style="display:flex; gap: 16px;">
+          <a href={privUrl}>{t('footer.privacy') as string}</a>
+          <span style="color: var(--border-strong);">·</span>
+          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">Google Play ↗</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

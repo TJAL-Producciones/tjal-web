@@ -1,0 +1,281 @@
+---
+// src/pages/en/privacy.astro — Privacy Policy (EN)
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const updated = 'January 2025';
+const contact = 'tjalproducciones@gmail.com';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="Privacy Policy for Cuoteando — Information about data collection, ads, analytics and security."
+  lang="en"
+  canonicalPath="/en/privacy"
+>
+  <div class="privacy-page">
+    <!-- ░░ DOCUMENT HEADER ░░ -->
+    <div class="doc-header" aria-label="Document header">
+      <p class="boot-line muted" aria-hidden="true">C:\CUOTEANDO\LEGAL> TYPE PRIVACY.TXT</p>
+      <h1 class="doc-title">PRIVACY POLICY</h1>
+      <p class="doc-subtitle">Cuoteando — TJAL Producciones</p>
+      <p class="doc-meta">
+        Last updated: <strong>{updated}</strong>
+      </p>
+    </div>
+
+    <hr class="ascii-divider" />
+
+    <!-- ░░ INTRO ░░ -->
+    <section class="privacy-section" aria-labelledby="intro-heading">
+      <h2 id="intro-heading" class="sec-title">0. INTRODUCTION</h2>
+      <p>
+        TJAL Producciones (<em>"we"</em>, <em>"our"</em>) develops the application
+        <strong>Cuoteando</strong> (<em>"the App"</em>). This privacy policy explains what
+        information we collect, how we use it, and what rights you have regarding it.
+      </p>
+      <p>
+        By using the App, you agree to the practices described in this policy.
+      </p>
+    </section>
+
+    <!-- ░░ DATA WE COLLECT ░░ -->
+    <section class="privacy-section" aria-labelledby="data-heading">
+      <h2 id="data-heading" class="sec-title">1. DATA WE COLLECT</h2>
+
+      <h3 class="subsec-title">1.1 Locally stored data</h3>
+      <p>
+        Information you enter into the App (installment records, amounts, dates, product names) is
+        stored <strong>only on your device</strong> using local storage. It is not transmitted to
+        any TJAL Producciones server.
+      </p>
+
+      <h3 class="subsec-title">1.2 Usage and diagnostic data</h3>
+      <p>
+        We use the following Google third-party services to improve the App:
+      </p>
+      <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Firebase Analytics:</strong> collects anonymous usage data such as screens
+          visited, session duration, and interaction events. Does not include personally
+          identifiable information.</span>
+        </li>
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Firebase Crashlytics:</strong> collects error and crash reports (device type,
+          Android version, stack trace) to help us fix issues. Does not include personal data.</span>
+        </li>
+      </ul>
+
+      <h3 class="subsec-title">1.3 Advertising</h3>
+      <p>
+        The App includes advertising from <strong>Google AdMob</strong>. Google may collect and use
+        device data to show relevant ads, in accordance with its own privacy policy. You can review
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+          Google's Privacy Policy ↗
+        </a>.
+      </p>
+
+      <h3 class="subsec-title">1.4 Data we do NOT collect</h3>
+      <ul class="retro-list">
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not collect your name, email address, or phone number.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not require user account registration.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not have access to your real financial data (bank accounts, credit cards).</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not share data with third parties other than the Google services mentioned above.</span></li>
+      </ul>
+    </section>
+
+    <!-- ░░ ACCESS & SECURITY ░░ -->
+    <section class="privacy-section" aria-labelledby="security-heading">
+      <h2 id="security-heading" class="sec-title">2. ACCESS AND SECURITY</h2>
+      <p>
+        The App can be protected with your device's biometric or screen lock security
+        (PIN, pattern, fingerprint, or none). This verification is managed entirely by the
+        Android operating system. TJAL Producciones does not have access to your credentials
+        and does not store any authentication data.
+      </p>
+    </section>
+
+    <!-- ░░ PERMISSIONS ░░ -->
+    <section class="privacy-section" aria-labelledby="perms-heading">
+      <h2 id="perms-heading" class="sec-title">3. APP PERMISSIONS</h2>
+      <p>The App may request the following system permissions:</p>
+      <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Biometrics / screen lock:</strong> to protect access to the App if configured by the user.</span>
+        </li>
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Internet:</strong> required to load AdMob ads and send data to Firebase Analytics/Crashlytics.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ░░ THIRD-PARTY SERVICES ░░ -->
+    <section class="privacy-section" aria-labelledby="third-heading">
+      <h2 id="third-heading" class="sec-title">4. THIRD-PARTY SERVICES</h2>
+      <p>The following third-party services have their own privacy policies:</p>
+      <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span>
+            <strong>Google Firebase</strong> —
+            <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">
+              Privacy Policy ↗
+            </a>
+          </span>
+        </li>
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span>
+            <strong>Google AdMob</strong> —
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+              Privacy Policy ↗
+            </a>
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ░░ DATA RETENTION ░░ -->
+    <section class="privacy-section" aria-labelledby="retention-heading">
+      <h2 id="retention-heading" class="sec-title">5. DATA RETENTION</h2>
+      <p>
+        Data you save in the App (installments, records) is stored locally on your device as
+        long as the App is installed. Uninstalling the App removes that data. TJAL Producciones
+        does not retain copies of your personal information.
+      </p>
+      <p>
+        Data collected by Firebase Analytics and Crashlytics is retained according to Google's
+        policies.
+      </p>
+    </section>
+
+    <!-- ░░ CHILDREN ░░ -->
+    <section class="privacy-section" aria-labelledby="minors-heading">
+      <h2 id="minors-heading" class="sec-title">6. CHILDREN'S PRIVACY</h2>
+      <p>
+        The App is not directed to children under 13 years of age. We do not knowingly collect
+        information from children. If you are a parent or guardian and believe a child has
+        provided us with information, please contact us to have it removed.
+      </p>
+    </section>
+
+    <!-- ░░ CHANGES ░░ -->
+    <section class="privacy-section" aria-labelledby="changes-heading">
+      <h2 id="changes-heading" class="sec-title">7. CHANGES TO THIS POLICY</h2>
+      <p>
+        We may update this Privacy Policy periodically. We will notify you of any changes by
+        posting the new policy on this page and updating the <em>"Last updated"</em> date.
+        We recommend you review this page regularly.
+      </p>
+    </section>
+
+    <!-- ░░ CONTACT ░░ -->
+    <section class="privacy-section" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="sec-title">[ CONTACT ]</h2>
+      <div class="terminal-box" data-title="CONTACT">
+        <p>If you have questions about this Privacy Policy, contact us:</p>
+        <p class="contact-line">
+          <span class="prompt-char">C:\&gt;</span>
+          <a href={`mailto:${contact}`} id="privacy-contact-email">{contact}</a>
+        </p>
+        <p class="contact-line">
+          <span class="prompt-char">C:\&gt;</span>
+          <span>TJAL Producciones</span>
+        </p>
+      </div>
+    </section>
+
+    <hr class="ascii-divider" />
+
+    <p class="doc-footer-note">
+      This document was last updated in {updated} and applies to the current version of Cuoteando for Android.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .privacy-page { padding: 2rem 0; max-width: 700px; }
+
+  .doc-header { margin-bottom: 1.5rem; }
+
+  .boot-line {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .doc-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    color: var(--primary);
+    letter-spacing: 0.1em;
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .doc-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .doc-meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .privacy-section { margin-bottom: 2rem; }
+
+  .sec-title {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--primary);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px dashed var(--border-strong);
+  }
+
+  .subsec-title {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-heading);
+    margin: 1rem 0 0.5rem;
+  }
+
+  .privacy-section p {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-body);
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+  }
+
+  .privacy-section p a { color: var(--primary); }
+
+  .ok { color: var(--color-success) !important; }
+
+  .contact-line {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    margin: 0.5rem 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .prompt-char { color: var(--primary); font-weight: 700; flex-shrink: 0; }
+
+  .doc-footer-note {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    font-style: italic;
+  }
+</style>

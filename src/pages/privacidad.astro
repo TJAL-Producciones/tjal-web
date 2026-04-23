@@ -1,0 +1,298 @@
+---
+// src/pages/privacidad.astro — Política de Privacidad (ES)
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const updated = 'Enero 2025';
+const contact = 'tjalproducciones@gmail.com';
+---
+
+<BaseLayout
+  title="Política de Privacidad"
+  description="Política de Privacidad de Cuoteando — Información sobre datos, anuncios, analytics y seguridad."
+  lang="es"
+  canonicalPath="/privacidad"
+>
+  <div class="privacy-page">
+    <!-- ░░ HEADER DOCUMENTO ░░ -->
+    <div class="doc-header" aria-label="Encabezado del documento">
+      <p class="boot-line muted" aria-hidden="true">C:\CUOTEANDO\LEGAL> TYPE PRIVACIDAD.TXT</p>
+      <h1 class="doc-title">POLÍTICA DE PRIVACIDAD</h1>
+      <p class="doc-subtitle">Cuoteando — TJAL Producciones</p>
+      <p class="doc-meta">
+        Última actualización: <strong>{updated}</strong>
+      </p>
+    </div>
+
+    <hr class="ascii-divider" />
+
+    <!-- ░░ INTRO ░░ -->
+    <section class="privacy-section" aria-labelledby="intro-heading">
+      <h2 id="intro-heading" class="sec-title">0. INTRODUCCIÓN</h2>
+      <p>
+        TJAL Producciones (<em>"nosotros"</em>, <em>"nuestro"</em>) desarrolla la aplicación
+        <strong>Cuoteando</strong> (<em>"la App"</em>). Esta política de privacidad explica qué
+        información recopilamos, cómo la usamos y qué derechos tenés con respecto a ella.
+      </p>
+      <p>
+        Al usar la App, aceptás las prácticas descritas en esta política.
+      </p>
+    </section>
+
+    <!-- ░░ DATOS QUE RECOPILAMOS ░░ -->
+    <section class="privacy-section" aria-labelledby="data-heading">
+      <h2 id="data-heading" class="sec-title">1. DATOS QUE RECOPILAMOS</h2>
+
+      <h3 class="subsec-title">1.1 Datos almacenados localmente</h3>
+      <p>
+        La información que ingresás en la App (registros de cuotas, montos, fechas, nombres de
+        productos) se guarda <strong>únicamente en tu dispositivo</strong> mediante almacenamiento
+        local. No se transmite a ningún servidor de TJAL Producciones.
+      </p>
+
+      <h3 class="subsec-title">1.2 Datos de uso y diagnóstico</h3>
+      <p>
+        Utilizamos los siguientes servicios de terceros de Google para mejorar la App:
+      </p>
+      <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Firebase Analytics:</strong> recopila datos de uso anónimos como pantallas
+          visitadas, duración de sesiones y eventos de interacción. No incluye información
+          personalmente identificable.</span>
+        </li>
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Firebase Crashlytics:</strong> recopila informes de errores y fallos técnicos
+          (tipo de dispositivo, versión de Android, traza del error) para ayudarnos a corregir
+          problemas. No incluye datos personales.</span>
+        </li>
+      </ul>
+
+      <h3 class="subsec-title">1.3 Publicidad</h3>
+      <p>
+        La App incluye publicidad de <strong>Google AdMob</strong>. Google puede recopilar y usar
+        datos del dispositivo para mostrar anuncios relevantes, de acuerdo con su propia política
+        de privacidad. Podés consultar la
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+          Política de Privacidad de Google ↗
+        </a>.
+      </p>
+
+      <h3 class="subsec-title">1.4 Datos que NO recopilamos</h3>
+      <ul class="retro-list">
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>No recopilamos tu nombre, correo electrónico ni teléfono.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>No requerimos registro de cuenta de usuario.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>No tenemos acceso a tus datos financieros reales (cuentas bancarias, tarjetas).</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>No compartimos datos con terceros salvo los servicios de Google mencionados.</span></li>
+      </ul>
+    </section>
+
+    <!-- ░░ ACCESO Y SEGURIDAD ░░ -->
+    <section class="privacy-section" aria-labelledby="security-heading">
+      <h2 id="security-heading" class="sec-title">2. ACCESO Y SEGURIDAD</h2>
+      <p>
+        La App puede protegerse con la seguridad biométrica o de pantalla de bloqueo
+        de tu propio dispositivo (PIN, patrón, huella digital o sin bloqueo). Esta verificación
+        es gestionada íntegramente por el sistema operativo Android. TJAL Producciones no
+        tiene acceso a tus credenciales ni almacena ningún dato de autenticación.
+      </p>
+    </section>
+
+    <!-- ░░ USO DE PERMISOS ░░ -->
+    <section class="privacy-section" aria-labelledby="perms-heading">
+      <h2 id="perms-heading" class="sec-title">3. PERMISOS DE LA APP</h2>
+      <p>La App puede solicitar los siguientes permisos del sistema:</p>
+      <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Biometría / pantalla de bloqueo:</strong> para proteger el acceso a la App si el usuario lo configura.</span>
+        </li>
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span><strong>Internet:</strong> requerido para cargar anuncios de AdMob y enviar datos a Firebase Analytics/Crashlytics.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ░░ SERVICIOS DE TERCEROS ░░ -->
+    <section class="privacy-section" aria-labelledby="third-heading">
+      <h2 id="third-heading" class="sec-title">4. SERVICIOS DE TERCEROS</h2>
+      <p>Los siguientes servicios de terceros tienen sus propias políticas de privacidad:</p>
+      <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span>
+            <strong>Google Firebase</strong> —
+            <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">
+              Política de privacidad ↗
+            </a>
+          </span>
+        </li>
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span>
+            <strong>Google AdMob</strong> —
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+              Política de privacidad ↗
+            </a>
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ░░ RETENCIÓN ░░ -->
+    <section class="privacy-section" aria-labelledby="retention-heading">
+      <h2 id="retention-heading" class="sec-title">5. RETENCIÓN DE DATOS</h2>
+      <p>
+        Los datos que guardás en la App (cuotas, registros) se almacenan localmente en tu
+        dispositivo mientras la App esté instalada. Al desinstalarla, esos datos se eliminan.
+        TJAL Producciones no retiene copias de tu información personal.
+      </p>
+      <p>
+        Los datos recopilados por Firebase Analytics y Crashlytics se retienen según las
+        políticas de Google.
+      </p>
+    </section>
+
+    <!-- ░░ MENORES ░░ -->
+    <section class="privacy-section" aria-labelledby="minors-heading">
+      <h2 id="minors-heading" class="sec-title">6. PRIVACIDAD DE MENORES</h2>
+      <p>
+        La App no está dirigida a menores de 13 años. No recopilamos intencionalmente
+        información de menores. Si sos padre o tutor y creés que un menor nos proporcionó
+        información, contactanos para eliminarla.
+      </p>
+    </section>
+
+    <!-- ░░ CAMBIOS ░░ -->
+    <section class="privacy-section" aria-labelledby="changes-heading">
+      <h2 id="changes-heading" class="sec-title">7. CAMBIOS EN ESTA POLÍTICA</h2>
+      <p>
+        Podemos actualizar esta Política de Privacidad periódicamente. Notificaremos cualquier
+        cambio publicando la nueva política en esta página y actualizando la fecha de
+        <em>"Última actualización"</em>. Te recomendamos revisar esta página regularmente.
+      </p>
+    </section>
+
+    <!-- ░░ CONTACTO ░░ -->
+    <section class="privacy-section" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="sec-title">[ CONTACTO ]</h2>
+      <div class="terminal-box" data-title="CONTACTO">
+        <p>Si tenés preguntas sobre esta Política de Privacidad, contactanos:</p>
+        <p class="contact-line">
+          <span class="prompt-char">C:\&gt;</span>
+          <a href={`mailto:${contact}`} id="privacy-contact-email">{contact}</a>
+        </p>
+        <p class="contact-line">
+          <span class="prompt-char">C:\&gt;</span>
+          <span>TJAL Producciones</span>
+        </p>
+      </div>
+    </section>
+
+    <hr class="ascii-divider" />
+
+    <p class="doc-footer-note">
+      Este documento fue actualizado por última vez en {updated} y aplica a la versión actual de Cuoteando para Android.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .privacy-page {
+    padding: 2rem 0;
+    max-width: 700px;
+  }
+
+  .doc-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .boot-line {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .doc-title {
+    font-family: var(--font-mono);
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    color: var(--primary);
+    letter-spacing: 0.1em;
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .doc-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  .doc-meta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* Secciones */
+  .privacy-section {
+    margin-bottom: 2rem;
+  }
+
+  .sec-title {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--primary);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px dashed var(--border-strong);
+  }
+
+  .subsec-title {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-heading);
+    margin: 1rem 0 0.5rem;
+  }
+
+  .privacy-section p {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-body);
+    line-height: 1.8;
+    margin-bottom: 0.75rem;
+  }
+
+  .privacy-section p a {
+    color: var(--primary);
+  }
+
+  .ok { color: var(--color-success) !important; }
+
+  /* Contacto */
+  .contact-line {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    margin: 0.5rem 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .prompt-char {
+    color: var(--primary);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .doc-footer-note {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    font-style: italic;
+  }
+</style>
