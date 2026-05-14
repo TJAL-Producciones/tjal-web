@@ -83,7 +83,7 @@ const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
              class={Astro.url.pathname.includes('privacidad') || Astro.url.pathname.includes('privacy') ? 'active' : ''}>
             {t('nav.privacy')}
           </a>
-          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" id="nav-playstore-link">
+          <a href="https://play.google.com/store/apps/details?id=ar.com.tjal.cuoteando" target="_blank" rel="noopener noreferrer" id="nav-playstore-link">
             {t('nav.playstore')}
           </a>
 
@@ -113,7 +113,7 @@ const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
         <div style="display:flex; gap: 16px;">
           <a href={privUrl}>{t('footer.privacy') as string}</a>
           <span style="color: var(--border-strong);">·</span>
-          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">Google Play ↗</a>
+          <a href="https://play.google.com/store/apps/details?id=ar.com.tjal.cuoteando" target="_blank" rel="noopener noreferrer">Google Play ↗</a>
         </div>
       </div>
     </footer>
