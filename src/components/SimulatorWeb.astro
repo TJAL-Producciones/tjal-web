@@ -11,9 +11,11 @@ const isEn = lang === 'en';
 
 const copy = isEn ? {
   boot1: 'TJAL PRODUCCIONES',
+  bootCopy: 'Copyright 2026 TJAL Producciones. All rights reserved.',
   boot2: 'Detecting browser...',
   boot3: 'Inflation module loaded...',
   boot4: 'System ready.',
+  heroLabel: 'WEB FINANCIAL TOOL',
   heroSub: 'Calculate whether it\'s better to pay in installments or cash. Track your due dates without complications.',
   badge1: '100% Private',
   badge2: 'No Registration',
@@ -87,9 +89,11 @@ const copy = isEn ? {
   smokeEmailSaved: '[ EMAIL REGISTERED LOCALLY — THANK YOU [OK] ]',
 } : {
   boot1: 'TJAL PRODUCCIONES',
+  bootCopy: 'Copyright 2026 TJAL Producciones. All rights reserved.',
   boot2: 'Detectando navegador...',
   boot3: 'Módulo de inflación cargado...',
   boot4: 'Sistema listo.',
+  heroLabel: 'HERRAMIENTA FINANCIERA WEB',
   heroSub: 'Calculá si te conviene pagar en cuotas o al contado. Controlá tus vencimientos sin complicaciones.',
   badge1: '100% Privado',
   badge2: 'Sin Registro',
@@ -168,14 +172,16 @@ const copy = isEn ? {
 <section class="hero-section" aria-label={isEn ? 'System Presentation' : 'Presentación del Sistema'}>
   <div class="boot-sequence" aria-hidden="true">
     <p class="boot-line muted">{copy.boot1}</p>
-    <hr class="boot-divider" />
+    <p class="boot-line muted">{copy.bootCopy}</p>
+    <p class="boot-line muted">──────────────────────────────────────</p>
     <p class="boot-line">{copy.boot2} <span class="ok">[OK]</span></p>
     <p class="boot-line">{copy.boot3} <span class="ok">[OK]</span></p>
     <p class="boot-line">{copy.boot4}</p>
-    <hr class="boot-divider" />
+    <p class="boot-line muted">──────────────────────────────────────</p>
   </div>
 
   <div class="hero-title-block">
+    <p class="section-label">{copy.heroLabel}</p>
     <h1 class="hero-title">
       CUOTEANDO<span class="blink" aria-hidden="true"></span>
     </h1>
@@ -1077,30 +1083,32 @@ const copy = isEn ? {
 <style>
   /* ── Bloque 1: Hero & Log ── */
   .hero-section {
-    padding: 1.25rem 0 1.5rem;
+    padding: 2rem 0 1.5rem;
   }
 
   .boot-sequence {
-    margin-bottom: 1.5rem;
-  }
-
-  .boot-divider {
-    border: none;
-    border-top: 1px solid var(--border-strong);
-    margin: 0.45rem 0;
+    margin-bottom: 2rem;
   }
 
   .boot-line {
     font-family: var(--font-mono);
     font-size: 0.78rem;
     color: var(--text-body);
-    line-height: 1.65;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
   }
+
+  .boot-line:nth-child(1) { animation-delay: 0.0s; }
+  .boot-line:nth-child(2) { animation-delay: 0.2s; }
+  .boot-line:nth-child(3) { animation-delay: 0.4s; }
+  .boot-line:nth-child(4) { animation-delay: 0.6s; }
+  .boot-line:nth-child(5) { animation-delay: 0.9s; }
+  .boot-line:nth-child(6) { animation-delay: 1.2s; }
+  .boot-line:nth-child(7) { animation-delay: 1.4s; }
 
   .boot-line.muted {
     color: var(--text-muted);
-    font-weight: 700;
-    letter-spacing: 0.05em;
   }
 
   .ok {
@@ -1108,8 +1116,15 @@ const copy = isEn ? {
     font-weight: 700;
   }
 
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-4px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
   .hero-title-block {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 1.6s forwards;
   }
 
   .hero-title {
@@ -1141,6 +1156,16 @@ const copy = isEn ? {
   .content-section {
     margin-bottom: 1.75rem;
     scroll-margin-top: 1rem;
+  }
+
+  #simulador {
+    opacity: 0;
+    animation: fadeIn 0.5s ease 1.9s forwards;
+  }
+
+  #mis-compras {
+    opacity: 0;
+    animation: fadeIn 0.5s ease 2.1s forwards;
   }
 
   .section-heading {
