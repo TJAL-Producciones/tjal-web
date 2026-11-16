@@ -1,50 +1,56 @@
 ---
 // src/layouts/BaseLayout.astro
 import '../styles/global.css';
-import { getLangFromUrl, useTranslations, type Lang } from '../i18n/translations';
+import { useTranslations, type Lang } from '../i18n/translations';
 
 interface Props {
   title: string;
   description?: string;
   lang?: Lang;
-  canonicalPath?: string;  // e.g. '/' or '/privacidad'
-  alternatePath?: string;  // ruta explícita en el otro idioma (incluye base)
+  canonicalPath?: string;  // e.g. '/' or '/privacidad' or '/app'
+  alternatePath?: string;  // ruta explícita en el otro idioma
+  variant?: 'web' | 'app';
 }
 
 const {
   title,
-  description = 'Cuoteando — Registrá y seguí tus cuotas. App para Android.',
+  description = 'Cuoteando — Calculá si te conviene pagar en cuotas o al contado frente a la inflación y controlá tus vencimientos.',
   lang = 'es',
   canonicalPath = '/',
   alternatePath,
+  variant = 'web',
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-// Alternate links for hreflang
-const esPath  = lang === 'en'
-  ? `${base}${canonicalPath.replace(/^\/en/, '')}`
-  : `${base}${canonicalPath}`;
-const enPath  = lang === 'en'
-  ? `${base}${canonicalPath}`
-  : `${base}/en${canonicalPath}`;
+// Normalize canonical paths for ES and EN
+const cleanCanonical = canonicalPath.startsWith('/en')
+  ? canonicalPath.replace(/^\/en/, '') || '/'
+  : canonicalPath;
+
+const esPath = `${base}${cleanCanonical === '/' ? '/' : cleanCanonical}`;
+const enPath = `${base}/en${cleanCanonical === '/' ? '/' : cleanCanonical}`;
 
 const t = useTranslations(lang);
 
 // Nav links per lang
-const homeUrl = lang === 'en' ? `${base}/en/`         : `${base}/`;
+const homeUrl = lang === 'en' ? `${base}/en/` : `${base}/`;
+const appHomeUrl = lang === 'en' ? `${base}/en/app/` : `${base}/app/`;
 const privUrl = lang === 'en' ? `${base}/en/privacy/` : `${base}/privacidad/`;
-const langLabel = lang === 'en' ? 'ES' : 'EN';
+const simUrl  = `${homeUrl}#simulador`;
+const comprasUrl = `${homeUrl}#mis-compras`;
 
-// Language toggle: use explicit alternatePath if provided (needed when slug differs per locale)
-// e.g. /privacidad ↔ /en/privacy
-const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
+// Language toggle URLs
+const esUrl = lang === 'es' ? esPath : (alternatePath ?? esPath);
+const enUrl = lang === 'en' ? enPath : (alternatePath ?? enPath);
+
+const siteOrigin = Astro.site ? Astro.site.origin : 'https://tjal-producciones.github.io';
 ---
 
 <!doctype html>
 <html lang={lang}>
   <head>
-  <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
@@ -53,9 +59,9 @@ const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
     <meta name="robots" content="index, follow" />
 
     <!-- Canonical & hreflang -->
-    <link rel="canonical" href={`https://tjal-producciones.github.io${lang === 'en' ? enPath : esPath}`} />
-    <link rel="alternate" hreflang="es" href={`https://tjal-producciones.github.io${esPath}`} />
-    <link rel="alternate" hreflang="en" href={`https://tjal-producciones.github.io${enPath}`} />
+    <link rel="canonical" href={`${siteOrigin}${lang === 'en' ? enPath : esPath}`} />
+    <link rel="alternate" hreflang="es" href={`${siteOrigin}${esUrl}`} />
+    <link rel="alternate" hreflang="en" href={`${siteOrigin}${enUrl}`} />
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
@@ -72,27 +78,50 @@ const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
     <!-- ░░ HEADER ░░ -->
     <header class="site-header" role="banner">
       <div class="header-inner">
-        <a href={homeUrl} class="brand" aria-label="Cuoteando — Inicio">CUOTEANDO</a>
+        <a href={variant === 'app' ? appHomeUrl : homeUrl} class="brand" aria-label="Cuoteando — Inicio">CUOTEANDO</a>
 
         <nav class="site-nav" aria-label="Navegación principal">
-          <a href={homeUrl}
-             class={Astro.url.pathname === homeUrl || Astro.url.pathname === homeUrl.slice(0,-1) ? 'active' : ''}>
-            {t('nav.home')}
-          </a>
-          <a href={privUrl}
-             class={Astro.url.pathname.includes('privacidad') || Astro.url.pathname.includes('privacy') ? 'active' : ''}>
-            {t('nav.privacy')}
-          </a>
-          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" id="nav-playstore-link">
-            {t('nav.playstore')}
-          </a>
+          {variant === 'web' ? (
+            <>
+              <a href={simUrl}>
+                {t('nav.simulator')}
+              </a>
+              <a href={comprasUrl}>
+                {t('nav.purchases')}
+              </a>
+              <a href={privUrl}
+                 class={Astro.url.pathname.includes('privacidad') || Astro.url.pathname.includes('privacy') ? 'active' : ''}>
+                {t('nav.privacy')}
+              </a>
+            </>
+          ) : (
+            <>
+              <a href={appHomeUrl}
+                 class={Astro.url.pathname.includes('/app') ? 'active' : ''}>
+                {t('nav.home')}
+              </a>
+              <a href={privUrl}
+                 class={Astro.url.pathname.includes('privacidad') || Astro.url.pathname.includes('privacy') ? 'active' : ''}>
+                {t('nav.privacy')}
+              </a>
+              <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer" id="nav-playstore-link">
+                {t('nav.playstore')}
+              </a>
+            </>
+          )}
 
-          <!-- Language Switcher -->
+          <!-- Language Switcher ES / EN -->
           <div class="lang-switcher" role="navigation" aria-label="Cambiar idioma / Change language">
-            <a href={langToggle}
-               class={lang !== 'en' && langLabel === 'EN' ? '' : (lang === 'en' && langLabel === 'EN' ? 'current' : '')}
-               aria-label={langLabel === 'EN' ? 'Switch to English' : 'Cambiar a Español'}>
-              {langLabel}
+            <a href={esUrl}
+               class={lang === 'es' ? 'current' : ''}
+               aria-label="Cambiar a Español">
+              ES
+            </a>
+            <span aria-hidden="true">/</span>
+            <a href={enUrl}
+               class={lang === 'en' ? 'current' : ''}
+               aria-label="Switch to English">
+              EN
             </a>
           </div>
         </nav>
@@ -109,12 +138,24 @@ const langToggle = alternatePath ?? (lang === 'en' ? esPath : enPath);
     <!-- ░░ FOOTER ░░ -->
     <footer class="site-footer" role="contentinfo">
       <div class="footer-inner">
-        <span>{t('footer.copy') as string}</span>
-        <div style="display:flex; gap: 16px;">
-          <a href={privUrl}>{t('footer.privacy') as string}</a>
-          <span style="color: var(--border-strong);">·</span>
-          <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">Google Play ↗</a>
-        </div>
+        {variant === 'web' ? (
+          <div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap: 10px; width: 100%;">
+            <span>{t('footer.copy') as string}</span>
+            <span style="color: var(--border-strong);" aria-hidden="true">·</span>
+            <a href={privUrl}>{t('footer.privacy') as string}</a>
+            <span style="color: var(--border-strong);" aria-hidden="true">·</span>
+            <span>{t('footer.local') as string}</span>
+          </div>
+        ) : (
+          <>
+            <span>{t('footer.copy') as string}</span>
+            <div style="display:flex; gap: 16px;">
+              <a href={privUrl}>{t('footer.privacy') as string}</a>
+              <span style="color: var(--border-strong);">·</span>
+              <a href="https://play.google.com/store" target="_blank" rel="noopener noreferrer">Google Play ↗</a>
+            </div>
+          </>
+        )}
       </div>
     </footer>
   </body>

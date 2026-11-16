@@ -8,17 +8,18 @@ const contact = 'tjalproducciones@gmail.com';
 
 <BaseLayout
   title="Privacy Policy"
-  description="Privacy Policy for Cuoteando — Information about data collection, ads, analytics and security."
+  description="Privacy Policy for Cuoteando (Web Tool & Mobile App) — Information about local browser storage, privacy, ads, analytics and security."
   lang="en"
-  canonicalPath="/en/privacy"
-  alternatePath="/tjal-web/privacidad/"
+  canonicalPath="/en/privacy/"
+  alternatePath="/privacidad/"
+  variant="web"
 >
   <div class="privacy-page">
     <!-- ░░ DOCUMENT HEADER ░░ -->
     <div class="doc-header" aria-label="Document header">
-      <p class="boot-line muted" aria-hidden="true">C:\CUOTEANDO\LEGAL> TYPE PRIVACY.TXT</p>
+      <p class="boot-line muted" aria-hidden="true">C:\CUOTEANDO\LEGAL&gt; TYPE PRIVACY.TXT</p>
       <h1 class="doc-title">PRIVACY POLICY</h1>
-      <p class="doc-subtitle">Cuoteando — TJAL Producciones</p>
+      <p class="doc-subtitle">Cuoteando (Web &amp; App) — TJAL Producciones</p>
       <p class="doc-meta">
         Last updated: <strong>{updated}</strong>
       </p>
@@ -30,29 +31,46 @@ const contact = 'tjalproducciones@gmail.com';
     <section class="privacy-section" aria-labelledby="intro-heading">
       <h2 id="intro-heading" class="sec-title">0. INTRODUCTION</h2>
       <p>
-        TJAL Producciones (<em>"we"</em>, <em>"our"</em>) develops the application
-        <strong>Cuoteando</strong> (<em>"the App"</em>). This privacy policy explains what
-        information we collect, how we use it, and what rights you have regarding it.
+        TJAL Producciones (<em>"we"</em>, <em>"our"</em>) develops the
+        <strong>Cuoteando</strong> ecosystem, consisting of its <strong>Web Tool</strong> (in-browser
+        simulator and local purchase tracker) and its <strong>Mobile Application</strong> (<em>"the App"</em>).
+        This unified privacy policy explains what information is processed in each environment, how it
+        is stored, and what rights you have regarding it.
       </p>
       <p>
-        By using the App, you agree to the practices described in this policy.
+        By using the Web Tool or the App, you agree to the practices described in this policy.
       </p>
     </section>
 
     <!-- ░░ DATA WE COLLECT ░░ -->
     <section class="privacy-section" aria-labelledby="data-heading">
-      <h2 id="data-heading" class="sec-title">1. DATA WE COLLECT</h2>
+      <h2 id="data-heading" class="sec-title">1. DATA &amp; STORAGE</h2>
 
-      <h3 class="subsec-title">1.1 Locally stored data</h3>
+      <h3 class="subsec-title">1.1 Web Tool (100% in your browser)</h3>
       <p>
-        Information you enter into the App (installment records, amounts, dates, product names) is
+        In the web version of Cuoteando, all cash vs. installment calculations and records saved in
+        the <em>"My Purchases"</em> section are processed and stored <strong>exclusively in your
+        browser's local memory (`LocalStorage`)</strong>. No amounts, item names, or financial
+        calculations are ever transmitted to TJAL Producciones servers.
+      </p>
+      <p>
+        When you use the <strong>Generate Backup Link</strong> feature, your active purchases are
+        encoded directly into the URL hash fragment (`#backup=...`) on your own device so you can
+        bookmark or restore your state across devices without creating an account or storing data on
+        external databases.
+      </p>
+
+      <h3 class="subsec-title">1.2 Mobile Application (Local device storage)</h3>
+      <p>
+        Information you enter into the mobile App (installment records, amounts, dates, product names) is
         stored <strong>only on your device</strong> using local storage. It is not transmitted to
         any TJAL Producciones server.
       </p>
 
-      <h3 class="subsec-title">1.2 Usage and diagnostic data</h3>
+      <h3 class="subsec-title">1.3 Usage and diagnostic data (Mobile Application)</h3>
       <p>
-        We use the following Google third-party services to improve the App:
+        In the mobile application we use the following Google third-party services to improve
+        stability and user experience:
       </p>
       <ul class="retro-list">
         <li>
@@ -64,25 +82,25 @@ const contact = 'tjalproducciones@gmail.com';
         <li>
           <span class="marker" aria-hidden="true">[►]</span>
           <span><strong>Firebase Crashlytics:</strong> collects error and crash reports (device type,
-          Android version, stack trace) to help us fix issues. Does not include personal data.</span>
+          OS version, stack trace) to help us fix issues. Does not include personal data.</span>
         </li>
       </ul>
 
-      <h3 class="subsec-title">1.3 Advertising</h3>
+      <h3 class="subsec-title">1.4 Advertising (Mobile Application)</h3>
       <p>
-        The App includes advertising from <strong>Google AdMob</strong>. Google may collect and use
+        The mobile App includes advertising from <strong>Google AdMob</strong>. Google may collect and use
         device data to show relevant ads, in accordance with its own privacy policy. You can review
         <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
           Google's Privacy Policy ↗
         </a>.
       </p>
 
-      <h3 class="subsec-title">1.4 Data we do NOT collect</h3>
+      <h3 class="subsec-title">1.5 Data we do NOT collect</h3>
       <ul class="retro-list">
-        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not collect your name, email address, or phone number.</span></li>
-        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not require user account registration.</span></li>
-        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not have access to your real financial data (bank accounts, credit cards).</span></li>
-        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not share data with third parties other than the Google services mentioned above.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not require user account registration or profile creation.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not have access to your real financial data (bank accounts, credit cards, or credentials).</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not transmit your simulations or your purchase list to our own servers.</span></li>
+        <li><span class="marker ok" aria-hidden="true">[✓]</span><span>We do not sell or share personal data with third parties.</span></li>
       </ul>
     </section>
 
@@ -90,17 +108,25 @@ const contact = 'tjalproducciones@gmail.com';
     <section class="privacy-section" aria-labelledby="security-heading">
       <h2 id="security-heading" class="sec-title">2. ACCESS AND SECURITY</h2>
       <p>
-        The App can be protected with your device's biometric or screen lock security
-        (PIN, pattern, fingerprint, or none). This verification is managed entirely by the
-        Android operating system. TJAL Producciones does not have access to your credentials
-        and does not store any authentication data.
+        In the Web Tool, persistence relies strictly on your browser's local storage; you can delete
+        your saved purchases at any time directly from the interface (`[ X ]`) or by clearing site
+        data in your browser settings.
+      </p>
+      <p>
+        In the mobile App, access can be protected with your device's biometric or screen lock security
+        (PIN, pattern, fingerprint, or none), managed entirely by the operating system without TJAL
+        Producciones having access to your credentials.
       </p>
     </section>
 
     <!-- ░░ PERMISSIONS ░░ -->
     <section class="privacy-section" aria-labelledby="perms-heading">
-      <h2 id="perms-heading" class="sec-title">3. APP PERMISSIONS</h2>
-      <p>The App may request the following system permissions:</p>
+      <h2 id="perms-heading" class="sec-title">3. SYSTEM PERMISSIONS</h2>
+      <p>
+        The Web Tool does not request special browser permissions other than standard clipboard access
+        when you choose to copy a WhatsApp summary or your backup link.
+      </p>
+      <p>The mobile App may request the following system permissions:</p>
       <ul class="retro-list">
         <li>
           <span class="marker" aria-hidden="true">[►]</span>
@@ -108,7 +134,7 @@ const contact = 'tjalproducciones@gmail.com';
         </li>
         <li>
           <span class="marker" aria-hidden="true">[►]</span>
-          <span><strong>Internet:</strong> required to load AdMob ads and send data to Firebase Analytics/Crashlytics.</span>
+          <span><strong>Internet:</strong> required in the mobile App to load AdMob ads and send diagnostic data to Firebase.</span>
         </li>
       </ul>
     </section>
@@ -118,6 +144,15 @@ const contact = 'tjalproducciones@gmail.com';
       <h2 id="third-heading" class="sec-title">4. THIRD-PARTY SERVICES</h2>
       <p>The following third-party services have their own privacy policies:</p>
       <ul class="retro-list">
+        <li>
+          <span class="marker" aria-hidden="true">[►]</span>
+          <span>
+            <strong>Cloudflare Pages</strong> (Static hosting for the Web Tool) —
+            <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">
+              Privacy Policy ↗
+            </a>
+          </span>
+        </li>
         <li>
           <span class="marker" aria-hidden="true">[►]</span>
           <span>
@@ -143,13 +178,10 @@ const contact = 'tjalproducciones@gmail.com';
     <section class="privacy-section" aria-labelledby="retention-heading">
       <h2 id="retention-heading" class="sec-title">5. DATA RETENTION</h2>
       <p>
-        Data you save in the App (installments, records) is stored locally on your device as
-        long as the App is installed. Uninstalling the App removes that data. TJAL Producciones
-        does not retain copies of your personal information.
-      </p>
-      <p>
-        Data collected by Firebase Analytics and Crashlytics is retained according to Google's
-        policies.
+        Data you save in Cuoteando (both in your web browser's `LocalStorage` and in the mobile App's
+        internal storage) remains solely on your device until you choose to delete it, clear browser
+        data, or uninstall the application. TJAL Producciones does not retain copies of your financial
+        or personal information.
       </p>
     </section>
 
@@ -157,7 +189,7 @@ const contact = 'tjalproducciones@gmail.com';
     <section class="privacy-section" aria-labelledby="minors-heading">
       <h2 id="minors-heading" class="sec-title">6. CHILDREN'S PRIVACY</h2>
       <p>
-        The App is not directed to children under 13 years of age. We do not knowingly collect
+        Cuoteando is not directed to children under 13 years of age. We do not knowingly collect
         information from children. If you are a parent or guardian and believe a child has
         provided us with information, please contact us to have it removed.
       </p>
@@ -192,7 +224,7 @@ const contact = 'tjalproducciones@gmail.com';
     <hr class="ascii-divider" />
 
     <p class="doc-footer-note">
-      This document was last updated in {updated} and applies to the current version of Cuoteando for Android.
+      This document was last updated in {updated} and applies to both the Cuoteando Web Tool and its Mobile Application.
     </p>
   </div>
 </BaseLayout>

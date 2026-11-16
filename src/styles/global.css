@@ -8,37 +8,37 @@
 
 /* --- Variables CSS --- */
 :root {
-  /* Paleta Cuoteando */
+  /* Paleta Cuoteando — Retro-Paper / Editorial Monospace */
   --color-brand-50:  #fdf2f2;
-  --color-brand-100: #fce7e7;
-  --color-brand-500: #800020;
-  --color-brand-600: #6b001a;
-  --color-brand-900: #4a0404;
-  --color-app-bg:    #fdf6e3;
+  --color-brand-100: #f5dada;
+  --color-brand-500: #7A0019;
+  --color-brand-600: #580012;
+  --color-brand-900: #3a000c;
+  --color-app-bg:    #FDFBF2;
 
   /* Estado */
-  --color-success: #15803d;
+  --color-success: #1E824C;
   --color-warning: #b45309;
-  --color-error:   #be123c;
+  --color-error:   #7A0019;
 
   /* Aliases semánticos */
-  --bg-page:       #fdf6e3;
-  --bg-card:       #ffffff;
-  --bg-overlay:    rgba(253, 246, 227, 0.97);
-  --primary:       #800020;
-  --primary-dk:    #6b001a;
-  --primary-lt:    #fce7e7;
-  --text-heading:  #4a0404;
-  --text-body:     #3b0f0f;
-  --text-muted:    #9ca3af;
-  --border:        #fce7e7;
-  --border-strong: #e8c4c4;
+  --bg-page:       #FDFBF2;
+  --bg-card:       #FFFFFF;
+  --bg-overlay:    rgba(253, 251, 242, 0.97);
+  --primary:       #7A0019;
+  --primary-dk:    #520011;
+  --primary-lt:    #f9ebeb;
+  --text-heading:  #1E1E1E;
+  --text-body:     #1E1E1E;
+  --text-muted:    #75736C;
+  --border:        #e6e1d6;
+  --border-strong: #c9bfb0;
 
   /* Tipografías */
   --font-mono:     'Space Mono', 'Courier New', monospace;
   --font-display:  'Outfit', sans-serif;
   --font-body:     'Inter', sans-serif;
-  --font-brand:    'Playfair Display', serif;
+  --font-brand:    'Space Mono', 'Courier New', monospace;
 
   /* Espaciado */
   --space-xs:  4px;
@@ -145,13 +145,13 @@ main {
 }
 
 .site-header .brand {
-  font-family: var(--font-brand);
-  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
-  color: #fdf6e3;
+  letter-spacing: 0.14em;
+  color: #FDFBF2;
   text-decoration: none;
-  text-transform: none;
+  text-transform: uppercase;
 }
 
 /* --- Navegación retro --- */
@@ -374,11 +374,40 @@ main {
 .version-tag {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--primary);
-  border: 1px solid var(--border-strong);
-  padding: 1px 6px;
+  border: 1px solid var(--primary);
+  background-color: var(--bg-card);
+  padding: 2px 8px;
   letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+/* Botón secundario con borde bordó */
+.btn-outline {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  background-color: var(--bg-card);
+  border: 1px solid var(--primary);
+  padding: 6px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: #FDFBF2;
+  text-decoration: none;
+}
+
+.btn-outline:active {
+  transform: translate(1px, 1px);
 }
 
 /* --- Responsive --- */

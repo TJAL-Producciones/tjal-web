@@ -1,0 +1,1703 @@
+---
+// src/components/SimulatorWeb.astro
+import type { Lang } from '../i18n/translations';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const isEn = lang === 'en';
+
+const copy = isEn ? {
+  boot1: 'TJAL PRODUCCIONES',
+  boot2: 'Detecting browser...',
+  boot3: 'Inflation module loaded...',
+  boot4: 'System ready.',
+  heroSub: 'Calculate whether it\'s better to pay in installments or cash. Track your due dates without complications.',
+  badge1: '100% Private',
+  badge2: 'No Registration',
+  badge3: 'Free',
+
+  simBoxTitle: 'TOOL',
+  simCmd: 'SIMULADOR.EXE',
+  itemNameLabel: 'Item / Purchase name (optional):',
+  itemNamePlaceholder: 'E.g.: Headphones, Fridge, Flight...',
+  cashPriceLabel: '1. Cash price ($):',
+  cashPricePlaceholder: 'E.g.: 100000',
+  instPriceLabel: '2. Installments price ($):',
+  modeTotal: '[ TOTAL AMOUNT ]',
+  modeEach: '[ EACH INSTALLMENT ]',
+  instTotalPlaceholder: 'E.g.: 120000',
+  instEachPlaceholder: 'E.g.: 20000',
+  instCountLabel: '3. Number of installments:',
+  otherBtn: 'Other',
+  otherPlaceholder: 'Qty',
+  inflationLabel: '4. Estimated monthly inflation (%):',
+  inflationPlaceholder: '5',
+  calcBtn: '[ RUN CALCULATION ]',
+  errorMissing: '[!] ERROR: Enter valid amounts greater than 0 for cash price, installments, and number of payments.',
+
+  resBoxTitle: 'DIAGNOSTICS',
+  resCmd: 'RESULTADO.LOG',
+  verdictPrefix: 'RESULT:',
+  verdictInstallments: '[ BETTER IN INSTALLMENTS ]',
+  verdictCash: '[ BETTER IN CASH ]',
+  verdictTie: '[ TECHNICAL TIE ]',
+  rowCashPrice: 'Cash price (today):',
+  rowNominalTotal: 'Nominal total in installments:',
+  rowMonthlyPayment: 'Fixed monthly installment:',
+  rowRealTotal: 'Real cost of installments today (NPV):',
+  rowNetSavings: 'Net savings (in today\'s money):',
+  rowLastInstallment: 'Real value of last installment:',
+  liquationNote: 'liquefied by inflation',
+  savePurchaseBtn: '[ + SAVE TO MY PURCHASES ]',
+  copyWhatsappBtn: '[ COPY SUMMARY FOR WHATSAPP ]',
+  copiedMsg: '[ SUMMARY COPIED TO CLIPBOARD [OK] ]',
+  savedMsg: '[ PURCHASE SAVED IN LOCAL MEMORY [OK] ]',
+
+  storeBoxTitle: 'STORAGE',
+  storeCmd: 'MIS_COMPRAS.DAT',
+  memLabel: 'LOCAL MEMORY:',
+  slotsUsed: 'SLOTS USED',
+  emptyStore: 'No active purchases registered. Run a calculation above and press [ + SAVE TO MY PURCHASES ] or add one manually.',
+  addManualToggle: '[ + ADD PURCHASE MANUALLY ]',
+  manualNameLabel: 'Item name:',
+  manualNamePlaceholder: 'E.g.: Notebook',
+  manualAmountLabel: 'Monthly installment ($):',
+  manualTotalInstLabel: 'Total installments:',
+  manualSaveBtn: '[ SAVE ]',
+  manualCancelBtn: '[ CANCEL ]',
+  monthlyTotalLabel: 'TOTAL TO PAY THIS MONTH:',
+  paidBtn: '[ +1 PAID INSTALLMENT ]',
+  completedTag: '[ COMPLETED ]',
+  deleteBtnTitle: 'Delete purchase',
+  backupWarn: '[!] Your data is stored only in this browser.',
+  backupBtn: '[ GENERATE BACKUP LINK ]',
+  backupCopied: '[ BACKUP LINK COPIED TO CLIPBOARD [OK] ]',
+  backupRestored: '[ BACKUP RESTORED SUCCESSFULLY [OK] ]',
+
+  smokeHeader: 'SYSTEM_ALERT: WEB_MEMORY_FULL (3/3 SLOTS)',
+  smokeText: 'This web version supports up to 3 active purchases simultaneously. Do you need to track more purchases or receive alerts before each closing date?',
+  smokeVoteBtn: '[ VOTE FOR MORE CAPACITY + ]',
+  smokeVotedTitle: '[ VOTE REGISTERED — THANK YOU [OK] ]',
+  smokeEmailPrompt: 'Leave your email if you want to be notified when we expand this feature:',
+  smokeEmailPlaceholder: 'your@email.com',
+  smokeEmailSend: '[ SAVE NOTIFICATION ]',
+  smokeEmailSaved: '[ EMAIL REGISTERED LOCALLY — THANK YOU [OK] ]',
+} : {
+  boot1: 'TJAL PRODUCCIONES',
+  boot2: 'Detectando navegador...',
+  boot3: 'Módulo de inflación cargado...',
+  boot4: 'Sistema listo.',
+  heroSub: 'Calculá si te conviene pagar en cuotas o al contado. Controlá tus vencimientos sin complicaciones.',
+  badge1: '100% Privado',
+  badge2: 'Sin Registro',
+  badge3: 'Gratis',
+
+  simBoxTitle: 'HERRAMIENTA',
+  simCmd: 'SIMULADOR.EXE',
+  itemNameLabel: 'Concepto / Producto (opcional):',
+  itemNamePlaceholder: 'Ej: Auriculares, Heladera, Zapatillas...',
+  cashPriceLabel: '1. Precio de contado ($):',
+  cashPricePlaceholder: 'Ej: 100000',
+  instPriceLabel: '2. Precio total en cuotas ($):',
+  modeTotal: '[ MONTO TOTAL ]',
+  modeEach: '[ VALOR DE CADA CUOTA ]',
+  instTotalPlaceholder: 'Ej: 120000',
+  instEachPlaceholder: 'Ej: 20000',
+  instCountLabel: '3. Cantidad de cuotas:',
+  otherBtn: 'Otro',
+  otherPlaceholder: 'Cant.',
+  inflationLabel: '4. Inflación mensual estimada (%):',
+  inflationPlaceholder: '5',
+  calcBtn: '[ EJECUTAR CÁLCULO ]',
+  errorMissing: '[!] ERROR: Ingresá montos válidos mayores a 0 para precio de contado, cuotas y cantidad de pagos.',
+
+  resBoxTitle: 'DIAGNÓSTICO',
+  resCmd: 'RESULTADO.LOG',
+  verdictPrefix: 'RESULTADO:',
+  verdictInstallments: '[ CONVIENE EN CUOTAS ]',
+  verdictCash: '[ CONVIENE AL CONTADO ]',
+  verdictTie: '[ EMPATE TÉCNICO ]',
+  rowCashPrice: 'Precio de contado (hoy):',
+  rowNominalTotal: 'Total nominal en cuotas:',
+  rowMonthlyPayment: 'Valor nominal de cada cuota:',
+  rowRealTotal: 'Costo real total de las cuotas hoy (VPN):',
+  rowNetSavings: 'Diferencia neta ahorrada (en $ de hoy):',
+  rowLastInstallment: 'Valor real de la última cuota:',
+  liquationNote: 'se licúa por inflación',
+  savePurchaseBtn: '[ + GUARDAR EN MIS COMPRAS ]',
+  copyWhatsappBtn: '[ COPIAR RESUMEN PARA WHATSAPP ]',
+  copiedMsg: '[ RESUMEN COPIADO AL PORTAPAPELES [OK] ]',
+  savedMsg: '[ COMPRA GUARDADA EN MEMORIA LOCAL [OK] ]',
+
+  storeBoxTitle: 'ALMACENAMIENTO',
+  storeCmd: 'MIS_COMPRAS.DAT',
+  memLabel: 'MEMORIA LOCAL:',
+  slotsUsed: 'SLOTS USADOS',
+  emptyStore: 'No hay compras activas registradas. Ejecutá un cálculo arriba y presioná [ + GUARDAR EN MIS COMPRAS ] o cargá una manualmente.',
+  addManualToggle: '[ + CARGAR COMPRA MANUAL ]',
+  manualNameLabel: 'Nombre del ítem:',
+  manualNamePlaceholder: 'Ej: Notebook',
+  manualAmountLabel: 'Valor de cuota mensual ($):',
+  manualTotalInstLabel: 'Total de cuotas:',
+  manualSaveBtn: '[ GUARDAR ]',
+  manualCancelBtn: '[ CANCELAR ]',
+  monthlyTotalLabel: 'TOTAL A PAGAR ESTE MES:',
+  paidBtn: '[ +1 CUOTA PAGADA ]',
+  completedTag: '[ COMPLETADA ]',
+  deleteBtnTitle: 'Eliminar compra',
+  backupWarn: '[!] Tus datos quedan guardados solo en este navegador.',
+  backupBtn: '[ GENERAR ENLACE DE RESPALDO ]',
+  backupCopied: '[ ENLACE DE RESPALDO COPIADO AL PORTAPAPELES [OK] ]',
+  backupRestored: '[ RESPALDO RESTAURADO CON ÉXITO [OK] ]',
+
+  smokeHeader: 'AVISO_SISTEMA: MEMORIA_WEB_LLENA (3/3 SLOTS)',
+  smokeText: 'Esta versión web admite hasta 3 compras activas simultáneamente. ¿Necesitás gestionar más compras o recibir avisos antes de cada cierre?',
+  smokeVoteBtn: '[ VOTAR POR MÁS CAPACIDAD + ]',
+  smokeVotedTitle: '[ VOTO REGISTRADO — GRACIAS [OK] ]',
+  smokeEmailPrompt: 'Dejanos tu correo si querés enterarte cuando ampliemos esta función:',
+  smokeEmailPlaceholder: 'tu@correo.com',
+  smokeEmailSend: '[ GUARDAR AVISO ]',
+  smokeEmailSaved: '[ CORREO REGISTRADO — GRACIAS [OK] ]',
+};
+---
+
+<!-- ░░ BLOQUE 1: HERO & LOG DE SISTEMA ░░ -->
+<section class="hero-section" aria-label={isEn ? 'System Presentation' : 'Presentación del Sistema'}>
+  <div class="boot-sequence" aria-hidden="true">
+    <p class="boot-line muted">{copy.boot1}</p>
+    <hr class="boot-divider" />
+    <p class="boot-line">{copy.boot2} <span class="ok">[OK]</span></p>
+    <p class="boot-line">{copy.boot3} <span class="ok">[OK]</span></p>
+    <p class="boot-line">{copy.boot4}</p>
+    <hr class="boot-divider" />
+  </div>
+
+  <div class="hero-title-block">
+    <h1 class="hero-title">
+      CUOTEANDO<span class="blink" aria-hidden="true"></span>
+    </h1>
+    <p class="hero-sub">
+      {copy.heroSub}
+    </p>
+    <div class="hero-meta">
+      <span class="version-tag">{copy.badge1}</span>
+      <span class="version-tag">{copy.badge2}</span>
+      <span class="version-tag">{copy.badge3}</span>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ BLOQUE 2: SIMULADOR CONTADO VS. CUOTAS ░░ -->
+<section id="simulador" class="content-section" aria-labelledby="sim-heading">
+  <div class="terminal-box" data-title={copy.simBoxTitle}>
+    <h2 id="sim-heading" class="section-heading">
+      <span class="prompt-char">C:\&gt;</span> {copy.simCmd}
+    </h2>
+
+    <form id="sim-form" class="sim-form" novalidate>
+      <!-- Nombre opcional -->
+      <div class="form-group">
+        <label for="input-item-name" class="form-label">{copy.itemNameLabel}</label>
+        <input
+          type="text"
+          id="input-item-name"
+          class="terminal-input"
+          placeholder={copy.itemNamePlaceholder}
+          maxlength="50"
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- 1. Precio de contado -->
+      <div class="form-group">
+        <label for="input-cash" class="form-label">{copy.cashPriceLabel}</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix" aria-hidden="true">$</span>
+          <input
+            type="number"
+            id="input-cash"
+            class="terminal-input with-prefix"
+            placeholder={copy.cashPricePlaceholder}
+            inputmode="decimal"
+            min="0"
+            step="any"
+            required
+          />
+        </div>
+      </div>
+
+      <!-- 2. Precio en cuotas (con toggle Total vs Valor de cada cuota) -->
+      <div class="form-group">
+        <div class="label-row">
+          <label for="input-installments-amount" id="label-inst-amount" class="form-label">
+            {copy.instPriceLabel}
+          </label>
+          <div class="mode-toggle" role="group" aria-label="Modo de ingreso de cuotas">
+            <button type="button" id="btn-mode-total" class="tag-btn active" data-mode="total">
+              {copy.modeTotal}
+            </button>
+            <button type="button" id="btn-mode-each" class="tag-btn" data-mode="each">
+              {copy.modeEach}
+            </button>
+          </div>
+        </div>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix" aria-hidden="true">$</span>
+          <input
+            type="number"
+            id="input-installments-amount"
+            class="terminal-input with-prefix"
+            placeholder={copy.instTotalPlaceholder}
+            inputmode="decimal"
+            min="0"
+            step="any"
+            required
+          />
+        </div>
+        <p id="inst-helper-preview" class="input-helper" aria-live="polite"></p>
+      </div>
+
+      <!-- 3. Cantidad de cuotas -->
+      <div class="form-group">
+        <span class="form-label" id="label-inst-count">{copy.instCountLabel}</span>
+        <div class="selector-grid" role="group" aria-labelledby="label-inst-count">
+          <button type="button" class="quota-btn" data-quotas="3">3</button>
+          <button type="button" class="quota-btn active" data-quotas="6">6</button>
+          <button type="button" class="quota-btn" data-quotas="9">9</button>
+          <button type="button" class="quota-btn" data-quotas="12">12</button>
+          <button type="button" class="quota-btn" data-quotas="18">18</button>
+          <button type="button" class="quota-btn" data-quotas="custom" id="btn-quota-other">{copy.otherBtn}</button>
+        </div>
+        <div id="custom-quota-wrap" class="custom-quota-wrap" hidden>
+          <input
+            type="number"
+            id="input-custom-quotas"
+            class="terminal-input"
+            placeholder={copy.otherPlaceholder}
+            inputmode="numeric"
+            min="1"
+            max="120"
+            step="1"
+            value="6"
+          />
+        </div>
+      </div>
+
+      <!-- 4. Inflación mensual estimada -->
+      <div class="form-group">
+        <div class="label-row">
+          <label for="input-inflation" class="form-label">{copy.inflationLabel}</label>
+          <div class="preset-row" role="group" aria-label="Presets de inflación mensual">
+            <button type="button" class="tag-btn inflation-preset" data-inf="3">[ 3% ]</button>
+            <button type="button" class="tag-btn inflation-preset active" data-inf="5">[ 5% ]</button>
+            <button type="button" class="tag-btn inflation-preset" data-inf="8">[ 8% ]</button>
+          </div>
+        </div>
+        <div class="input-prefix-wrap">
+          <input
+            type="number"
+            id="input-inflation"
+            class="terminal-input with-suffix"
+            placeholder={copy.inflationPlaceholder}
+            inputmode="decimal"
+            min="0"
+            max="200"
+            step="0.1"
+            value="5"
+            required
+          />
+          <span class="input-suffix" aria-hidden="true">%</span>
+        </div>
+      </div>
+
+      <p id="sim-error" class="sim-error" role="alert" hidden>{copy.errorMissing}</p>
+
+      <!-- CTA Principal -->
+      <div class="sim-submit-wrap">
+        <button type="submit" class="btn-retro btn-full" id="btn-run-calc">
+          {copy.calcBtn}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ░░ BLOQUE 3: VEREDICTO DEL SISTEMA (RESULTADO.LOG) ░░ -->
+<section id="veredicto-section" class="content-section" aria-labelledby="res-heading" hidden>
+  <div class="terminal-box result-box" data-title={copy.resBoxTitle}>
+    <h2 id="res-heading" class="section-heading">
+      <span class="prompt-char">C:\&gt;</span> {copy.resCmd}
+    </h2>
+
+    <div class="verdict-banner" id="verdict-banner" aria-live="polite">
+      <span class="verdict-prefix">{copy.verdictPrefix}</span>
+      <strong id="verdict-badge" class="verdict-badge">{copy.verdictInstallments}</strong>
+    </div>
+
+    <div class="receipt-log" role="region" aria-label={copy.resBoxTitle}>
+      <div class="receipt-row">
+        <span class="receipt-label">{copy.rowCashPrice}</span>
+        <span class="receipt-val" id="res-cash-val">$0</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">{copy.rowNominalTotal}</span>
+        <span class="receipt-val" id="res-nominal-total">$0</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">{copy.rowMonthlyPayment}</span>
+        <span class="receipt-val" id="res-monthly-val">$0</span>
+      </div>
+      <hr class="receipt-divider" />
+      <div class="receipt-row highlight-row">
+        <span class="receipt-label">{copy.rowRealTotal}</span>
+        <strong class="receipt-val" id="res-npv-val">$0</strong>
+      </div>
+      <div class="receipt-row highlight-row">
+        <span class="receipt-label">{copy.rowNetSavings}</span>
+        <strong class="receipt-val" id="res-savings-val">$0</strong>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">{copy.rowLastInstallment}</span>
+        <span class="receipt-val" id="res-last-quota-val">$0</span>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button type="button" class="btn-outline" id="btn-save-from-sim">
+        {copy.savePurchaseBtn}
+      </button>
+      <button type="button" class="btn-outline" id="btn-copy-whatsapp">
+        {copy.copyWhatsappBtn}
+      </button>
+    </div>
+
+    <p id="result-feedback" class="console-feedback ok" aria-live="polite" hidden></p>
+  </div>
+</section>
+
+<!-- ░░ BLOQUE 4: GESTOR LOCAL DE COMPRAS (MIS_COMPRAS.DAT) ░░ -->
+<section id="mis-compras" class="content-section" aria-labelledby="store-heading">
+  <div class="terminal-box" data-title={copy.storeBoxTitle}>
+    <div class="store-header-row">
+      <h2 id="store-heading" class="section-heading" style="margin-bottom: 0;">
+        <span class="prompt-char">C:\&gt;</span> {copy.storeCmd}
+      </h2>
+      <div class="memory-indicator" id="memory-indicator" aria-live="polite">
+        {copy.memLabel} <span class="mem-bars" id="mem-bars">[□□□]</span> <span id="mem-count">0/3</span> {copy.slotsUsed}
+      </div>
+    </div>
+
+    <!-- Smoke Test de Demanda (Alerta de Memoria Llena 3/3) -->
+    <div id="smoke-test-alert" class="smoke-alert" role="alert" hidden>
+      <p class="smoke-title">{copy.smokeHeader}</p>
+      <p class="smoke-body">{copy.smokeText}</p>
+      <div id="smoke-vote-wrap" class="smoke-actions">
+        <button type="button" class="btn-retro btn-sm" id="btn-smoke-vote">
+          {copy.smokeVoteBtn}
+        </button>
+      </div>
+      <div id="smoke-email-wrap" class="smoke-email-wrap" hidden>
+        <p class="smoke-voted-msg ok">{copy.smokeVotedTitle}</p>
+        <label for="input-smoke-email" class="smoke-email-label">{copy.smokeEmailPrompt}</label>
+        <div class="smoke-email-row">
+          <input
+            type="email"
+            id="input-smoke-email"
+            class="terminal-input"
+            placeholder={copy.smokeEmailPlaceholder}
+          />
+          <button type="button" class="btn-outline" id="btn-smoke-email-send">
+            {copy.smokeEmailSend}
+          </button>
+        </div>
+        <p id="smoke-email-feedback" class="console-feedback ok" hidden>{copy.smokeEmailSaved}</p>
+      </div>
+    </div>
+
+    <!-- Listado de compras guardadas -->
+    <div id="purchases-list" class="purchases-list" role="list" aria-live="polite"></div>
+
+    <p id="empty-purchases-msg" class="empty-store-msg">{copy.emptyStore}</p>
+
+    <!-- Sumatoria mensual + Botón carga manual -->
+    <div class="store-summary-bar">
+      <div class="monthly-sum-box">
+        <span class="sum-label">{copy.monthlyTotalLabel}</span>
+        <strong class="sum-amount" id="monthly-total-amount">$0</strong>
+      </div>
+      <button type="button" class="tag-btn" id="btn-toggle-manual">
+        {copy.addManualToggle}
+      </button>
+    </div>
+
+    <!-- Formulario rápido de carga manual -->
+    <form id="manual-add-form" class="manual-add-form" hidden novalidate>
+      <div class="manual-grid">
+        <div>
+          <label for="manual-name" class="form-label">{copy.manualNameLabel}</label>
+          <input type="text" id="manual-name" class="terminal-input" placeholder={copy.manualNamePlaceholder} maxlength="40" required />
+        </div>
+        <div>
+          <label for="manual-amount" class="form-label">{copy.manualAmountLabel}</label>
+          <input type="number" id="manual-amount" class="terminal-input" placeholder="20000" min="1" step="any" required />
+        </div>
+        <div>
+          <label for="manual-total-inst" class="form-label">{copy.manualTotalInstLabel}</label>
+          <input type="number" id="manual-total-inst" class="terminal-input" placeholder="6" min="1" max="120" step="1" value="6" required />
+        </div>
+      </div>
+      <div class="manual-actions">
+        <button type="submit" class="btn-outline" id="btn-manual-save">{copy.manualSaveBtn}</button>
+        <button type="button" class="tag-btn" id="btn-manual-cancel">{copy.manualCancelBtn}</button>
+      </div>
+    </form>
+
+    <hr class="receipt-divider" />
+
+    <!-- Mecanismo de Respaldo sin Servidor -->
+    <div class="backup-bar">
+      <p class="backup-warn">{copy.backupWarn}</p>
+      <button type="button" class="btn-outline" id="btn-generate-backup">
+        {copy.backupBtn}
+      </button>
+    </div>
+    <p id="backup-feedback" class="console-feedback ok" aria-live="polite" hidden></p>
+  </div>
+</section>
+
+<script define:vars={{ isEn, copy }}>
+  (() => {
+    const STORAGE_KEY = 'cuoteando_purchases_v1';
+    const SMOKE_KEY = 'cuoteando_capacity_vote_v1';
+    const MAX_SLOTS = 3;
+
+    // Estado del simulador
+    let inputMode = 'total'; // 'total' | 'each'
+    let selectedQuotas = 6;
+    let isCustomQuota = false;
+    let lastCalculation = null;
+
+    // Elementos DOM — Simulador
+    const form = document.getElementById('sim-form');
+    const inputName = document.getElementById('input-item-name');
+    const inputCash = document.getElementById('input-cash');
+    const inputInstAmount = document.getElementById('input-installments-amount');
+    const labelInstAmount = document.getElementById('label-inst-amount');
+    const btnModeTotal = document.getElementById('btn-mode-total');
+    const btnModeEach = document.getElementById('btn-mode-each');
+    const instHelperPreview = document.getElementById('inst-helper-preview');
+    const quotaBtns = document.querySelectorAll('.quota-btn');
+    const customQuotaWrap = document.getElementById('custom-quota-wrap');
+    const inputCustomQuotas = document.getElementById('input-custom-quotas');
+    const inputInflation = document.getElementById('input-inflation');
+    const presetBtns = document.querySelectorAll('.inflation-preset');
+    const simError = document.getElementById('sim-error');
+
+    // Elementos DOM — Resultado
+    const veredictoSection = document.getElementById('veredicto-section');
+    const verdictBanner = document.getElementById('verdict-banner');
+    const verdictBadge = document.getElementById('verdict-badge');
+    const resCashVal = document.getElementById('res-cash-val');
+    const resNominalTotal = document.getElementById('res-nominal-total');
+    const resMonthlyVal = document.getElementById('res-monthly-val');
+    const resNpvVal = document.getElementById('res-npv-val');
+    const resSavingsVal = document.getElementById('res-savings-val');
+    const resLastQuotaVal = document.getElementById('res-last-quota-val');
+    const btnSaveFromSim = document.getElementById('btn-save-from-sim');
+    const btnCopyWhatsapp = document.getElementById('btn-copy-whatsapp');
+    const resultFeedback = document.getElementById('result-feedback');
+
+    // Elementos DOM — Mis Compras
+    const memBars = document.getElementById('mem-bars');
+    const memCount = document.getElementById('mem-count');
+    const purchasesList = document.getElementById('purchases-list');
+    const emptyPurchasesMsg = document.getElementById('empty-purchases-msg');
+    const monthlyTotalAmount = document.getElementById('monthly-total-amount');
+    const btnToggleManual = document.getElementById('btn-toggle-manual');
+    const manualForm = document.getElementById('manual-add-form');
+    const manualName = document.getElementById('manual-name');
+    const manualAmount = document.getElementById('manual-amount');
+    const manualTotalInst = document.getElementById('manual-total-inst');
+    const btnManualCancel = document.getElementById('btn-manual-cancel');
+    const btnGenerateBackup = document.getElementById('btn-generate-backup');
+    const backupFeedback = document.getElementById('backup-feedback');
+
+    // Elementos DOM — Smoke Test
+    const smokeAlert = document.getElementById('smoke-test-alert');
+    const smokeVoteWrap = document.getElementById('smoke-vote-wrap');
+    const btnSmokeVote = document.getElementById('btn-smoke-vote');
+    const smokeEmailWrap = document.getElementById('smoke-email-wrap');
+    const inputSmokeEmail = document.getElementById('input-smoke-email');
+    const btnSmokeEmailSend = document.getElementById('btn-smoke-email-send');
+    const smokeEmailFeedback = document.getElementById('smoke-email-feedback');
+
+    // Formateador de moneda
+    const fmtCurrency = (num) => {
+      const locale = isEn ? 'en-US' : 'es-AR';
+      return '$' + new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(Math.round(num));
+    };
+
+    const getQuotasCount = () => {
+      if (isCustomQuota) {
+        const val = parseInt(inputCustomQuotas.value, 10);
+        return isNaN(val) || val < 1 ? 0 : val;
+      }
+      return selectedQuotas;
+    };
+
+    // Actualizar vista previa de monto en cuotas
+    const updateInstallmentPreview = () => {
+      const rawAmount = parseFloat(inputInstAmount.value);
+      const n = getQuotasCount();
+      if (!rawAmount || rawAmount <= 0 || !n || n <= 0) {
+        instHelperPreview.textContent = '';
+        return;
+      }
+      if (inputMode === 'total') {
+        const each = rawAmount / n;
+        instHelperPreview.textContent = isEn
+          ? `→ ${n} installments of ${fmtCurrency(each)} / month`
+          : `→ ${n} cuotas de ${fmtCurrency(each)} / mes`;
+      } else {
+        const total = rawAmount * n;
+        instHelperPreview.textContent = isEn
+          ? `→ Total in ${n} installments: ${fmtCurrency(total)}`
+          : `→ Total en ${n} cuotas: ${fmtCurrency(total)}`;
+      }
+    };
+
+    // Toggle modo Total vs Valor de cada cuota
+    btnModeTotal?.addEventListener('click', () => {
+      if (inputMode === 'total') return;
+      const n = getQuotasCount();
+      const val = parseFloat(inputInstAmount.value);
+      inputMode = 'total';
+      btnModeTotal.classList.add('active');
+      btnModeEach.classList.remove('active');
+      labelInstAmount.textContent = isEn ? '2. Total price in installments ($):' : '2. Precio total en cuotas ($):';
+      inputInstAmount.placeholder = copy.instTotalPlaceholder;
+      if (val > 0 && n > 0) {
+        inputInstAmount.value = String(Math.round(val * n));
+      }
+      updateInstallmentPreview();
+    });
+
+    btnModeEach?.addEventListener('click', () => {
+      if (inputMode === 'each') return;
+      const n = getQuotasCount();
+      const val = parseFloat(inputInstAmount.value);
+      inputMode = 'each';
+      btnModeEach.classList.add('active');
+      btnModeTotal.classList.remove('active');
+      labelInstAmount.textContent = isEn ? '2. Value of each installment ($):' : '2. Valor de cada cuota ($):';
+      inputInstAmount.placeholder = copy.instEachPlaceholder;
+      if (val > 0 && n > 0) {
+        inputInstAmount.value = String(Math.round(val / n));
+      }
+      updateInstallmentPreview();
+    });
+
+    inputInstAmount?.addEventListener('input', updateInstallmentPreview);
+
+    // Botones de cantidad de cuotas
+    quotaBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        quotaBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const q = btn.getAttribute('data-quotas');
+        if (q === 'custom') {
+          isCustomQuota = true;
+          customQuotaWrap.hidden = false;
+          inputCustomQuotas.focus();
+        } else {
+          isCustomQuota = false;
+          customQuotaWrap.hidden = true;
+          selectedQuotas = parseInt(q, 10);
+        }
+        updateInstallmentPreview();
+      });
+    });
+
+    inputCustomQuotas?.addEventListener('input', updateInstallmentPreview);
+
+    // Presets de inflación
+    presetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        inputInflation.value = btn.getAttribute('data-inf');
+      });
+    });
+
+    inputInflation?.addEventListener('input', () => {
+      const current = inputInflation.value;
+      presetBtns.forEach((b) => {
+        b.classList.toggle('active', b.getAttribute('data-inf') === current);
+      });
+    });
+
+    // Ejecutar cálculo de VPN
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      simError.hidden = true;
+      resultFeedback.hidden = true;
+
+      const cashPrice = parseFloat(inputCash.value);
+      const rawInst = parseFloat(inputInstAmount.value);
+      const n = getQuotasCount();
+      const infPct = parseFloat(inputInflation.value);
+
+      if (
+        isNaN(cashPrice) || cashPrice <= 0 ||
+        isNaN(rawInst) || rawInst <= 0 ||
+        isNaN(n) || n < 1 ||
+        isNaN(infPct) || infPct < 0
+      ) {
+        simError.hidden = false;
+        return;
+      }
+
+      const nominalTotal = inputMode === 'total' ? rawInst : rawInst * n;
+      const monthlyQuota = nominalTotal / n;
+      const infRate = infPct / 100;
+
+      // Valor Presente Neto (VPN) de las cuotas descontadas por inflación mensual
+      let npv = 0;
+      for (let k = 1; k <= n; k++) {
+        npv += monthlyQuota / Math.pow(1 + infRate, k);
+      }
+
+      const lastQuotaReal = monthlyQuota / Math.pow(1 + infRate, n);
+      const liquationPct = Math.max(0, (1 - lastQuotaReal / monthlyQuota) * 100);
+      const diff = cashPrice - npv; // Positivo => conviene en cuotas; Negativo => conviene contado
+      const absSavings = Math.abs(diff);
+      const savingsPct = (absSavings / cashPrice) * 100;
+
+      const itemName = (inputName.value || '').trim() || (isEn ? `Purchase (${n} inst.)` : `Compra (${n} cuotas)`);
+
+      let verdictType = 'installments';
+      if (Math.abs(diff) < 1) {
+        verdictType = 'tie';
+      } else if (diff > 0) {
+        verdictType = 'installments';
+      } else {
+        verdictType = 'cash';
+      }
+
+      lastCalculation = {
+        name: itemName,
+        cashPrice,
+        nominalTotal,
+        monthlyQuota,
+        n,
+        infPct,
+        npv,
+        lastQuotaReal,
+        liquationPct,
+        absSavings,
+        savingsPct,
+        verdictType,
+      };
+
+      // Renderizar resultado
+      verdictBanner.classList.remove('verdict-good', 'verdict-cash');
+      if (verdictType === 'installments') {
+        verdictBadge.textContent = copy.verdictInstallments;
+        verdictBanner.classList.add('verdict-good');
+      } else if (verdictType === 'cash') {
+        verdictBadge.textContent = copy.verdictCash;
+        verdictBanner.classList.add('verdict-cash');
+      } else {
+        verdictBadge.textContent = copy.verdictTie;
+      }
+
+      resCashVal.textContent = fmtCurrency(cashPrice);
+      resNominalTotal.textContent = `${fmtCurrency(nominalTotal)} (${n}x)`;
+      resMonthlyVal.textContent = fmtCurrency(monthlyQuota);
+      resNpvVal.textContent = fmtCurrency(npv);
+      resSavingsVal.textContent = `${fmtCurrency(absSavings)} (${savingsPct.toFixed(1)}%)`;
+      resLastQuotaVal.textContent = `${fmtCurrency(lastQuotaReal)} (-${liquationPct.toFixed(0)}% · ${copy.liquationNote})`;
+
+      veredictoSection.hidden = false;
+      veredictoSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    // Flash de confirmación en consola
+    const showFeedback = (el, msg) => {
+      if (!el) return;
+      el.textContent = msg;
+      el.hidden = false;
+      setTimeout(() => {
+        el.hidden = true;
+      }, 4500);
+    };
+
+    // Copiar resumen para WhatsApp
+    btnCopyWhatsapp?.addEventListener('click', async () => {
+      if (!lastCalculation) return;
+      const c = lastCalculation;
+      const verdictText = c.verdictType === 'installments'
+        ? (isEn ? 'BETTER IN INSTALLMENTS ✅' : 'CONVIENE EN CUOTAS ✅')
+        : (isEn ? 'BETTER IN CASH 💵' : 'CONVIENE AL CONTADO 💵');
+
+      const siteUrl = window.location.origin + window.location.pathname;
+      const lines = isEn ? [
+        `*CUOTEANDO — ${c.name}*`,
+        `Result: *${verdictText}*`,
+        `• Cash: ${fmtCurrency(c.cashPrice)}`,
+        `• Installments: ${c.n}x ${fmtCurrency(c.monthlyQuota)} (Total: ${fmtCurrency(c.nominalTotal)})`,
+        `• Est. monthly inflation: ${c.infPct}%`,
+        `• Real cost today (NPV): ${fmtCurrency(c.npv)}`,
+        `• Net savings: ${fmtCurrency(c.absSavings)} (${c.savingsPct.toFixed(1)}%)`,
+        `• Last installment real value: ${fmtCurrency(c.lastQuotaReal)} (-${c.liquationPct.toFixed(0)}%)`,
+        `Calculated at: ${siteUrl}`,
+      ] : [
+        `*CUOTEANDO — ${c.name}*`,
+        `Resultado: *${verdictText}*`,
+        `• Contado: ${fmtCurrency(c.cashPrice)}`,
+        `• Cuotas: ${c.n}x de ${fmtCurrency(c.monthlyQuota)} (Total: ${fmtCurrency(c.nominalTotal)})`,
+        `• Inflación mensual est.: ${c.infPct}%`,
+        `• Costo real hoy (VPN): ${fmtCurrency(c.npv)}`,
+        `• Ahorro neto: ${fmtCurrency(c.absSavings)} (${c.savingsPct.toFixed(1)}%)`,
+        `• Última cuota a valor real: ${fmtCurrency(c.lastQuotaReal)} (-${c.liquationPct.toFixed(0)}%)`,
+        `Calculado en: ${siteUrl}`,
+      ];
+
+      const text = lines.join('\n');
+      try {
+        await navigator.clipboard.writeText(text);
+        showFeedback(resultFeedback, copy.copiedMsg);
+      } catch {
+        // Fallback textarea copy
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showFeedback(resultFeedback, copy.copiedMsg);
+      }
+    });
+
+    // ── GESTOR LOCAL DE COMPRAS (LocalStorage + Respaldo URL + Smoke Test) ──
+    const loadPurchases = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.slice(0, MAX_SLOTS) : [];
+      } catch {
+        return [];
+      }
+    };
+
+    const savePurchases = (list) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0, MAX_SLOTS)));
+      } catch {
+        // ignore storage quota errors
+      }
+    };
+
+    const renderPurchases = () => {
+      const list = loadPurchases();
+      const used = list.length;
+
+      // Actualizar indicador de slots [■■□]
+      const filled = '■'.repeat(used) + '□'.repeat(Math.max(0, MAX_SLOTS - used));
+      memBars.textContent = `[${filled}]`;
+      memCount.textContent = `${used}/${MAX_SLOTS}`;
+
+      // Ocultar alerta de memoria llena si liberó un slot
+      if (used < MAX_SLOTS) {
+        smokeAlert.hidden = true;
+      }
+
+      purchasesList.innerHTML = '';
+      if (used === 0) {
+        emptyPurchasesMsg.hidden = false;
+        monthlyTotalAmount.textContent = fmtCurrency(0);
+        return;
+      }
+
+      emptyPurchasesMsg.hidden = true;
+      let monthlySum = 0;
+
+      list.forEach((item) => {
+        const isDone = item.paid >= item.total;
+        if (!isDone) {
+          monthlySum += Number(item.monthly) || 0;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'purchase-item';
+        card.setAttribute('role', 'listitem');
+
+        const pct = Math.min(100, Math.round((item.paid / item.total) * 100));
+
+        card.innerHTML = `
+          <div class="purchase-main">
+            <div class="purchase-info">
+              <strong class="purchase-name"></strong>
+              <span class="purchase-amount">${fmtCurrency(item.monthly)} / ${isEn ? 'mo' : 'mes'}</span>
+            </div>
+            <div class="purchase-progress-wrap">
+              <span class="purchase-progress-text">${isEn ? 'Progress' : 'Progreso'}: <strong>${item.paid}/${item.total}</strong> (${pct}%)</span>
+              <div class="ascii-progress-bar" aria-hidden="true">
+                <div class="ascii-progress-fill" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="purchase-actions">
+            ${
+              isDone
+                ? `<span class="completed-badge">${copy.completedTag}</span>`
+                : `<button type="button" class="btn-outline btn-xs btn-inc" data-id="${item.id}">${copy.paidBtn}</button>`
+            }
+            <button type="button" class="btn-outline btn-xs btn-del" data-id="${item.id}" title="${copy.deleteBtnTitle}" aria-label="${copy.deleteBtnTitle}">[ X ]</button>
+          </div>
+        `;
+
+        // Escapar nombre de forma segura
+        card.querySelector('.purchase-name').textContent = item.name;
+        purchasesList.appendChild(card);
+      });
+
+      monthlyTotalAmount.textContent = fmtCurrency(monthlySum);
+
+      // Eventos +1 cuota pagada y eliminar
+      purchasesList.querySelectorAll('.btn-inc').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const current = loadPurchases();
+          const target = current.find((p) => String(p.id) === String(id));
+          if (target && target.paid < target.total) {
+            target.paid += 1;
+            savePurchases(current);
+            renderPurchases();
+          }
+        });
+      });
+
+      purchasesList.querySelectorAll('.btn-del').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          const current = loadPurchases().filter((p) => String(p.id) !== String(id));
+          savePurchases(current);
+          renderPurchases();
+        });
+      });
+    };
+
+    const triggerSmokeTest = () => {
+      smokeAlert.hidden = false;
+      smokeAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    const tryAddPurchase = ({ name, monthly, total }) => {
+      const current = loadPurchases();
+      if (current.length >= MAX_SLOTS) {
+        triggerSmokeTest();
+        return false;
+      }
+      const newPurchase = {
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+        name: (name || '').trim() || (isEn ? 'Purchase' : 'Compra'),
+        monthly: Math.round(Number(monthly) || 0),
+        paid: 1,
+        total: Math.max(1, parseInt(total, 10) || 1),
+      };
+      current.push(newPurchase);
+      savePurchases(current);
+      renderPurchases();
+      return true;
+    };
+
+    // Guardar desde el resultado del simulador
+    btnSaveFromSim?.addEventListener('click', () => {
+      if (!lastCalculation) return;
+      const customName = (inputName.value || '').trim();
+      const added = tryAddPurchase({
+        name: customName || lastCalculation.name,
+        monthly: lastCalculation.monthlyQuota,
+        total: lastCalculation.n,
+      });
+      if (added) {
+        showFeedback(resultFeedback, copy.savedMsg);
+        document.getElementById('mis-compras')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+
+    // Carga manual
+    btnToggleManual?.addEventListener('click', () => {
+      const current = loadPurchases();
+      if (current.length >= MAX_SLOTS && manualForm.hidden) {
+        triggerSmokeTest();
+        return;
+      }
+      manualForm.hidden = !manualForm.hidden;
+      if (!manualForm.hidden) {
+        manualName.focus();
+      }
+    });
+
+    btnManualCancel?.addEventListener('click', () => {
+      manualForm.hidden = true;
+    });
+
+    manualForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = manualName.value.trim();
+      const monthly = parseFloat(manualAmount.value);
+      const total = parseInt(manualTotalInst.value, 10);
+      if (!name || isNaN(monthly) || monthly <= 0 || isNaN(total) || total < 1) {
+        return;
+      }
+      const added = tryAddPurchase({ name, monthly, total });
+      if (added) {
+        manualForm.reset();
+        manualTotalInst.value = '6';
+        manualForm.hidden = true;
+      }
+    });
+
+    // Smoke Test: Votar por más capacidad + Email opcional
+    btnSmokeVote?.addEventListener('click', () => {
+      try {
+        const prev = JSON.parse(localStorage.getItem(SMOKE_KEY) || '{}');
+        localStorage.setItem(
+          SMOKE_KEY,
+          JSON.stringify({
+            ...prev,
+            voted: true,
+            votedAt: new Date().toISOString(),
+            votes: (prev.votes || 0) + 1,
+          })
+        );
+      } catch {
+        // ignore
+      }
+      smokeVoteWrap.hidden = true;
+      smokeEmailWrap.hidden = false;
+      inputSmokeEmail?.focus();
+    });
+
+    btnSmokeEmailSend?.addEventListener('click', () => {
+      const email = (inputSmokeEmail?.value || '').trim();
+      if (!email || !email.includes('@')) return;
+      try {
+        const prev = JSON.parse(localStorage.getItem(SMOKE_KEY) || '{}');
+        localStorage.setItem(
+          SMOKE_KEY,
+          JSON.stringify({
+            ...prev,
+            email,
+            emailSavedAt: new Date().toISOString(),
+          })
+        );
+      } catch {
+        // ignore
+      }
+      smokeEmailFeedback.hidden = false;
+      inputSmokeEmail.disabled = true;
+      btnSmokeEmailSend.disabled = true;
+    });
+
+    // ── RESPALDO SIN SERVIDOR (#backup=...) ──
+    const encodeBackup = (data) => {
+      const json = JSON.stringify(data);
+      const bytes = new TextEncoder().encode(json);
+      let binary = '';
+      bytes.forEach((b) => (binary += String.fromCharCode(b)));
+      return btoa(binary);
+    };
+
+    const decodeBackup = (b64) => {
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      const json = new TextDecoder().decode(bytes);
+      return JSON.parse(json);
+    };
+
+    btnGenerateBackup?.addEventListener('click', async () => {
+      const current = loadPurchases();
+      const payload = encodeBackup(current);
+      const backupUrl = `${window.location.origin}${window.location.pathname}#backup=${encodeURIComponent(payload)}`;
+      try {
+        await navigator.clipboard.writeText(backupUrl);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = backupUrl;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      showFeedback(backupFeedback, copy.backupCopied);
+    });
+
+    const checkAndRestoreBackupFromUrl = () => {
+      const hash = window.location.hash || '';
+      if (!hash.startsWith('#backup=')) return;
+      const encoded = decodeURIComponent(hash.slice('#backup='.length));
+      try {
+        const restored = decodeBackup(encoded);
+        if (Array.isArray(restored)) {
+          const sanitized = restored.slice(0, MAX_SLOTS).map((item, idx) => ({
+            id: String(item.id || `restored-${idx}-${Date.now()}`),
+            name: String(item.name || 'Compra').slice(0, 50),
+            monthly: Math.max(0, Math.round(Number(item.monthly) || 0)),
+            paid: Math.max(0, parseInt(item.paid, 10) || 1),
+            total: Math.max(1, parseInt(item.total, 10) || 1),
+          }));
+          savePurchases(sanitized);
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+          showFeedback(backupFeedback, copy.backupRestored);
+        }
+      } catch {
+        // invalid backup hash
+      }
+    };
+
+    // Inicializar al cargar
+    checkAndRestoreBackupFromUrl();
+    renderPurchases();
+  })();
+</script>
+
+<style>
+  /* ── Bloque 1: Hero & Log ── */
+  .hero-section {
+    padding: 1.25rem 0 1.5rem;
+  }
+
+  .boot-sequence {
+    margin-bottom: 1.5rem;
+  }
+
+  .boot-divider {
+    border: none;
+    border-top: 1px solid var(--border-strong);
+    margin: 0.45rem 0;
+  }
+
+  .boot-line {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-body);
+    line-height: 1.65;
+  }
+
+  .boot-line.muted {
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .ok {
+    color: var(--color-success);
+    font-weight: 700;
+  }
+
+  .hero-title-block {
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title {
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 8vw, 3.25rem);
+    color: var(--primary);
+    letter-spacing: 0.1em;
+    line-height: 1.1;
+    margin: 0.2rem 0 0.65rem;
+    text-shadow: 2px 2px 0 var(--color-brand-100);
+  }
+
+  .hero-sub {
+    font-family: var(--font-body);
+    font-size: clamp(0.95rem, 2.8vw, 1.12rem);
+    color: var(--text-heading);
+    line-height: 1.55;
+    margin-bottom: 0.9rem;
+    max-width: 640px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ── Contenedores de sección ── */
+  .content-section {
+    margin-bottom: 1.75rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .section-heading {
+    font-size: 0.92rem;
+    color: var(--text-heading);
+    margin-bottom: 1.1rem;
+    font-weight: 700;
+  }
+
+  .prompt-char {
+    color: var(--primary);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* ── Bloque 2: Formulario Simulador ── */
+  .sim-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+
+  .input-prefix-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-prefix {
+    position: absolute;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .input-suffix {
+    position: absolute;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .terminal-input {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--text-body);
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    padding: 0.6rem 0.75rem;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .terminal-input.with-prefix {
+    padding-left: 2rem;
+  }
+
+  .terminal-input.with-suffix {
+    padding-right: 2.2rem;
+  }
+
+  .terminal-input:focus {
+    border-color: var(--primary);
+    box-shadow: 2px 2px 0 var(--color-brand-100);
+    background-color: #ffffff;
+  }
+
+  .input-helper {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--primary);
+    min-height: 1.1em;
+  }
+
+  /* Botones tag y selectores */
+  .mode-toggle,
+  .preset-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag-btn {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .tag-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .tag-btn.active {
+    background-color: var(--primary);
+    color: #FDFBF2;
+    border-color: var(--primary);
+    font-weight: 700;
+  }
+
+  .selector-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+  }
+
+  .quota-btn {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-body);
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    padding: 0.55rem 0.25rem;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    text-align: center;
+  }
+
+  .quota-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .quota-btn.active {
+    background-color: var(--primary);
+    color: #FDFBF2;
+    border-color: var(--primary);
+    box-shadow: 2px 2px 0 var(--primary-dk);
+  }
+
+  .custom-quota-wrap {
+    margin-top: 0.35rem;
+    max-width: 160px;
+  }
+
+  .sim-error {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--primary);
+    background-color: var(--primary-lt);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 0.75rem;
+  }
+
+  .sim-submit-wrap {
+    margin-top: 0.25rem;
+  }
+
+  .btn-full {
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+  }
+
+  /* ── Bloque 3: Veredicto del Sistema ── */
+  .result-box {
+    border-color: var(--primary);
+  }
+
+  .verdict-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+  }
+
+  .verdict-banner.verdict-good {
+    border-color: var(--color-success);
+    background-color: #eef8f2;
+  }
+
+  .verdict-banner.verdict-cash {
+    border-color: var(--primary);
+    background-color: var(--primary-lt);
+  }
+
+  .verdict-prefix {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .verdict-badge {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    letter-spacing: 0.04em;
+  }
+
+  .verdict-good .verdict-badge {
+    color: var(--color-success);
+  }
+
+  .verdict-cash .verdict-badge {
+    color: var(--primary);
+  }
+
+  .receipt-log {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    background-color: var(--bg-page);
+    border: 1px dashed var(--border-strong);
+    padding: 0.85rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .receipt-label {
+    color: var(--text-muted);
+  }
+
+  .receipt-val {
+    color: var(--text-heading);
+    text-align: right;
+  }
+
+  .highlight-row .receipt-label {
+    color: var(--text-heading);
+    font-weight: 700;
+  }
+
+  .highlight-row .receipt-val {
+    color: var(--primary);
+    font-size: 0.92rem;
+  }
+
+  .receipt-divider {
+    border: none;
+    border-top: 1px dashed var(--border-strong);
+    margin: 0.4rem 0;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .console-feedback {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    margin-top: 0.65rem;
+  }
+
+  /* ── Bloque 4: Gestor Local de Compras ── */
+  .store-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .memory-indicator {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-heading);
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    padding: 3px 8px;
+  }
+
+  .mem-bars {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .purchases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  :global(.purchase-item) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.7rem 0.85rem;
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    font-family: var(--font-mono);
+  }
+
+  :global(.purchase-main) {
+    flex: 1;
+    min-width: 210px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  :global(.purchase-info) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  :global(.purchase-name) {
+    font-size: 0.86rem;
+    color: var(--text-heading);
+  }
+
+  :global(.purchase-amount) {
+    font-size: 0.84rem;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  :global(.purchase-progress-wrap) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+  }
+
+  :global(.ascii-progress-bar) {
+    flex: 1;
+    max-width: 120px;
+    height: 7px;
+    background-color: #e6e1d6;
+    border: 1px solid var(--border-strong);
+    overflow: hidden;
+  }
+
+  :global(.ascii-progress-fill) {
+    height: 100%;
+    background-color: var(--primary);
+    transition: width 0.2s ease;
+  }
+
+  :global(.purchase-actions) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  :global(.btn-xs) {
+    font-size: 0.7rem !important;
+    padding: 4px 8px !important;
+  }
+
+  :global(.completed-badge) {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-success);
+    padding: 2px 6px;
+    border: 1px solid var(--color-success);
+    background-color: #eef8f2;
+  }
+
+  .empty-store-msg {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    background-color: var(--bg-page);
+    border: 1px dashed var(--border-strong);
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .store-summary-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    background-color: var(--bg-page);
+    border: 1px solid var(--border-strong);
+    margin-bottom: 0.75rem;
+  }
+
+  .monthly-sum-box {
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .sum-label {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .sum-amount {
+    font-size: 1rem;
+    color: var(--primary);
+  }
+
+  .manual-add-form {
+    background-color: var(--bg-page);
+    border: 1px dashed var(--primary);
+    padding: 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .manual-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .manual-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  /* ── Smoke Test Alert (3/3 Slots) ── */
+  .smoke-alert {
+    border: 2px solid var(--primary);
+    background-color: var(--primary-lt);
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .smoke-title {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.35rem;
+  }
+
+  .smoke-body {
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    color: var(--text-body);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-sm {
+    font-size: 0.76rem;
+    padding: 6px 14px;
+  }
+
+  .smoke-email-wrap {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .smoke-voted-msg {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+  }
+
+  .smoke-email-label {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--text-heading);
+  }
+
+  .smoke-email-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .smoke-email-row .terminal-input {
+    flex: 1;
+    min-width: 180px;
+    background-color: #ffffff;
+  }
+
+  /* ── Respaldo sin servidor ── */
+  .backup-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .backup-warn {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 600px) {
+    .selector-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .manual-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .result-actions .btn-outline,
+    .backup-bar .btn-outline {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
